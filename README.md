@@ -1,0 +1,21 @@
+# qktool
+Commonly opened files opened up quick.
+Also you can recover files.
+
+If the file normally requires you to run with 'sudo', then you MUST run this in sudo.  
+The opposite is also true. If user owns the file, then do NOT use sudo.
+
+## Usage:
+```
+qk [[ --editor ]] [alias]           # Open your file with the default editor.
+qk --recover [alias]                # Recover a previously backed up file.
+qk --auto-recovery                  # When adding a file to open, also save a backup.
+qk --editor [Name of editor]        # Set the default editor.
+qk --add-recovery [Path to file]    # Create a backup file stored by qktool.
+
+# Add a file to quickly open under your chosen alias.
+# Optionally, you can choose to add the file to recovery.
+qk --add-open [Path to file] --alias [Name of file] [[ --recover ]]
+                           
+
+```
