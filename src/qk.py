@@ -40,7 +40,33 @@ SUDO = True if os.getuid() == 0 else False
 PKG_DIR = Path(__file__).resolve()
 USER = os.environ['USER']
 
-def main(args: argparse.Namespace):
+def main():
+    parser = argparse.ArgumentParser(
+        description=DESCRIPTION
+    )
+
+    parser.add_argument('alias', nargs='?', help='Open a file by its alias.')
+    parser.add_argument('--recover', metavar='ALIAS', help='Recover a file by its alias.')
+    parser.add_argument('--auto-recovery', dest="autoRecovery", action='store_true', help='Back up files when adding them.')
+    parser.add_argument('--add-open', dest="addOpen", type=str, metavar='PATH', help='Add a file to open by alias.')
+    parser.add_argument('--alias', dest='newAlias', metavar='NAME', help='Alias for the file passed to --add-open.')
+    parser.add_argument('--editor', metavar='NAME', help='Set the default editor.')
+    parser.add_argument('--add-recovery', dest="addRecovery", metavar='PATH', help='Create a backup of a file.')
+    parser.add_argument('--update', action='store_true', help="Update the recovery files.")
+    parser.add_argument('--update-all', dest="updateAll", action='store_true', help="Update all recovery files.")
+    args = parser.parse_args()
+    if len(sys.argv) == 1:
+        print("I don't know what to do... there's no args.")
+        sys.exit(1)
+
+    if SUDO:
+        if not os.path.exists("/etc/qktool/recovery.d"):
+            os.makedirs("/etc/qktool/recovery.d")
+    else:
+        if not os.path.exists(f"/home/{USER}/qktool/recovery.d"):
+            os.makedirs(f"/home/{USER}/qktool/recovery.d", exist_ok=True)
+            
+            
     if SUDO:
         cfgPath = "/etc/qktool/qk.config"
     else:
@@ -59,7 +85,7 @@ def main(args: argparse.Namespace):
     except PermissionError:
         print("Permission denied.")
         sys.exit(1)
-        
+    
     for line in cfg:
         if "autorecovery=" in line:
             autoRecovery = line.split("=")[-1].replace("\n", "")
@@ -69,6 +95,10 @@ def main(args: argparse.Namespace):
 
         elif f"{args.alias}=" in line:
             aliasPath = line.split("=")[-1].replace("\n", "")
+            
+        elif f"{args.newAlias}" in line:
+            print("Alias already exists!")
+            sys.exit(1)
 
         elif '[open]' in line:
             openIndex = cfg.index(line)
@@ -92,7 +122,6 @@ def main(args: argparse.Namespace):
 
     elif args.addOpen:
         if args.newAlias:
-            print(cfg)
             var = args.newAlias + "=" + args.addOpen
             cfg.insert(openIndex+1, var)
             with open(cfgPath, 'w') as cfgFile:
@@ -115,33 +144,6 @@ def main(args: argparse.Namespace):
 
     elif args.addRecovery:
         pass
-    
-    
-    
+  
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description=DESCRIPTION
-    )
-
-    parser.add_argument('alias', nargs='?', help='Open a file by its alias.')
-    parser.add_argument('--recover', metavar='ALIAS', help='Recover a file by its alias.')
-    parser.add_argument('--auto-recovery', dest="autoRecovery", action='store_true', help='Back up files when adding them.')
-    parser.add_argument('--add-open', dest="addOpen", type=str, metavar='PATH', help='Add a file to open by alias.')
-    parser.add_argument('--alias', dest='newAlias', metavar='NAME', help='Alias for the file passed to --add-open.')
-    parser.add_argument('--editor', metavar='NAME', help='Set the default editor.')
-    parser.add_argument('--add-recovery', dest="addRecovery", metavar='PATH', help='Create a backup of a file.')
-    parser.add_argument('--update', action='store_true', help="Update the recovery files.")
-    parser.add_argument('--update-all', dest="updateAll", action='store_true', help="Update all recovery files.")
-    args = parser.parse_args()
-    if len(sys.argv) == 1:
-        print("I don't know what to do... there's no args.")
-        sys.exit(1)
-    
-    if SUDO:
-        if not os.path.exists("/etc/qktool/recovery.d"):
-            os.makedirs("/etc/qktool/recovery.d")
-    else:
-        if not os.path.exists(f"/home/{USER}/qktool/recovery.d"):
-            os.makedirs(f"/home/{USER}/qktool/recovery.d", exist_ok=True)
-    
-    main(args)
+    main()

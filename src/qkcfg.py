@@ -1,1 +1,3 @@
-print("NotImplementedYet")
+
+def main():
+    print("NotImplementedYet")

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qktool"
-version = "0.1.1"
+version = "0.1.2"
 description = "Quickly open and recover files for when you're tweaking"
 requires-python = ">=3.10"
 dependencies = [
@@ -12,5 +12,5 @@ dependencies = [
 ]
 
 [project.scripts]
-qk = "src.qk:cli"
-qkcfg = "src.qkcfg:cli"
+qk = "qktool.src.qk:main"
+qkcfg = "qktool.src.qkcfg:main"
