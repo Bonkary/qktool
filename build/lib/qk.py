@@ -86,7 +86,6 @@ def main():
         print("Permission denied.")
         sys.exit(1)
     
-    aliasPath = None
     for line in cfg:
         if "autorecovery=" in line:
             autoRecovery = line.split("=")[-1].replace("\n", "")
@@ -112,13 +111,9 @@ def main():
             pass
 
         else:
-            if aliasPath:
-                cmd = ['sudo', editor, aliasPath] if SUDO else [editor, aliasPath]
-                subprocess.call(cmd)
-            else:
-                print("No alias found.")
-                sys.exit(1)
-            
+            cmd = ['sudo', editor, aliasPath] if SUDO else [editor, aliasPath]
+            subprocess.call(cmd)
+
     elif args.updateAll:
         pass
 
@@ -127,7 +122,7 @@ def main():
 
     elif args.addOpen:
         if args.newAlias:
-            var = args.newAlias + "=" + args.addOpen + "\n"
+            var = args.newAlias + "=" + args.addOpen
             cfg.insert(openIndex+1, var)
             with open(cfgPath, 'w') as cfgFile:
                 cfgFile.writelines(cfg)

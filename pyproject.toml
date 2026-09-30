@@ -8,9 +8,8 @@ version = "0.1.2"
 description = "Quickly open and recover files for when you're tweaking"
 requires-python = ">=3.10"
 dependencies = [
-
 ]
 
 [project.scripts]
-qk = "qktool.src.qk:main"
-qkcfg = "qktool.src.qkcfg:main"
+qk = "qk:main"
+qkcfg = "qkcfg:main"
