@@ -55,6 +55,7 @@ def main():
     parser.add_argument('--update', action='store_true', help="Update the recovery files.")
     parser.add_argument('--update-all', dest="updateAll", action='store_true', help="Update all recovery files.")
     parser.add_argument('--show', action='store_true', help="Show the path to an alias")
+    parser.add_argument('--showall', action='store_true', help="Show all aliases and their paths")
     args = parser.parse_args()
     if len(sys.argv) == 1:
         print("I don't know what to do... there's no args.")
@@ -66,7 +67,6 @@ def main():
     else:
         if not os.path.exists(f"/home/{USER}/qktool/recovery.d"):
             os.makedirs(f"/home/{USER}/qktool/recovery.d", exist_ok=True)
-            
             
     if SUDO:
         cfgPath = "/etc/qktool/qk.config"
@@ -104,7 +104,7 @@ def main():
 
         elif '[open]' in line:
             openIndex = cfg.index(line)
-        
+    
     if args.alias:
         if args.recover:
             pass
@@ -122,7 +122,18 @@ def main():
             else:
                 print("No alias found.")
                 sys.exit(1)
-            
+    
+    elif args.showall:
+        aliasStart = cfg.index('[open]\n') + 1
+        aliases = cfg[aliasStart:]
+        for alias in aliases:
+            if '[recovery]' in alias:
+                break
+            else:
+                alias = alias.strip("\n")
+                if alias:
+                    print(alias)
+    
     elif args.updateAll:
         pass
 

@@ -11,5 +11,5 @@ dependencies = [
 ]
 
 [project.scripts]
-qk = "qk:main"
+qko = "qko:main"
 qkcfg = "qkcfg:main"

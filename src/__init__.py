@@ -1,4 +1,4 @@
-import qk as qk
+import src.qko as qko
 import qkcfg as qkcfg
 
-__all__ = ['qk', 'qkcfg']
+__all__ = ['qko', 'qkcfg']
