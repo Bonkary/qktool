@@ -54,6 +54,7 @@ def main():
     parser.add_argument('--add-recovery', dest="addRecovery", metavar='PATH', help='Create a backup of a file.')
     parser.add_argument('--update', action='store_true', help="Update the recovery files.")
     parser.add_argument('--update-all', dest="updateAll", action='store_true', help="Update all recovery files.")
+    parser.add_argument('--show', action='store_true', help="Show the path to an alias")
     args = parser.parse_args()
     if len(sys.argv) == 1:
         print("I don't know what to do... there's no args.")
@@ -110,6 +111,9 @@ def main():
 
         elif args.update:
             pass
+        
+        elif args.show:
+            print(args.alias, " = ", aliasPath)
 
         else:
             if aliasPath:
